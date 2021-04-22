@@ -1,5 +1,8 @@
 from itertools import permutations
 from Character import Character
+import math
+import random
+from bullet import Bullet
 
 
 # encounter_types = {
@@ -20,35 +23,37 @@ def get_move_order(players, enemies):
     """
 
     combatants = players + enemies
-    possible_orders = [[]]
-    iterations = len(combatants)
-    for i in range(iterations):
-        best = {
-            'speed': 0,
-            'Character': []
-        }
-        for combatant in combatants:
-            if combatant.speed > best['speed']:
-                best['speed'] = combatant.speed
-                best['Character'] = [combatant]
-            elif combatant.speed == best['speed']:
-                best['Character'].append(combatant)
-        possible_orders *= len(best['Character'])
-        list_of_permutations = list(permutations(best['Character']))
-        for i in range(len(possible_orders)):
-            for character in list_of_permutations[i]:
-                possible_orders[i].append(character.name)
-        for character in best['Character']:
-            combatants.remove(character)
-    for possible_order in possible_orders:
-        print(possible_order)
+    move_order = []
+    while len(combatants) > 0:
+        move_order.append(get_fastest_character(combatants))
+        combatants.remove(move_order[-1])
+    return move_order
+
+
+def get_fastest_character(characters):
+    """
+    Returns the fastest character out of the characters provided.
+    In the case of a  speed tie, it returns one at random.
+
+    :param characters: list of characters to compare the speeds of
+    :type characters: list[Characters]
+    :return: character with the highest speed
+    :rtype: Character
+    """
+
+    best = {
+        'speed': 0,
+        'Character': []
+    }
+    for character in characters:
+        if character.speed > best['speed']:
+            best['speed'] = character.speed
+            best['Character'] = [character]
+        elif character.speed == best['speed']:
+            best['Character'].append(character)
+    return random.choice(best['Character'])
 
 
 def battle(players, enemies):
     move_order = get_move_order(players, enemies)
 
-
-
-players = [Character('fastest', 10), Character('slow', 1)]
-enemies = [Character('Speedy', 10), Character('zoomer', 5)]
-get_move_order(players, enemies)
