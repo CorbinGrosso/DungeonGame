@@ -55,5 +55,18 @@ def get_fastest_character(characters):
 
 
 def battle(players, enemies):
-    move_order = get_move_order(players, enemies)
+    while len(enemies) > 0:
+        move_order = get_move_order(players, enemies)
 
+        for character in move_order:
+            if character.name == "Player":
+                options = Bullet(prompt="What will you do?", choices=['Attack', 'Defend', 'Cast Spell', 'Talk', 'Inspect'])
+                result = options.launch()
+                if result == 'Attack':
+                    print('You attack!')
+                elif result == 'Talk':
+                    options = Bullet(prompt="What will you talk about?", choices=['Weather', 'Compliment', 'Bully'])
+                    result = options.launch()
+
+
+battle([Character('Player', 10)], [Character('Skeleton', 2)])

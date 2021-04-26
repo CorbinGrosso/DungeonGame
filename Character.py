@@ -8,7 +8,7 @@ class Character:
     """
 
     # def __init__(self, name, level, hp, attack, defense, magic_attack, magic_dafense, movement_speed):
-    def __init__(self, name, level, base_hp, base_attack, base_defense, base_magic, base_speed, weapon, armor, ring, shield):
+    def __init__(self, name, level, base_hp, base_attack, base_defense, base_magic, base_speed, weapon, armor, shield):
         """
         Initializes an object of the Player class.
 
@@ -21,7 +21,6 @@ class Character:
         :param base_speed: Base speed stat
         :param weapon: Weapon that the Character is equipt with
         :param armor: Armor that the Character is equipt with
-        :param ring: Ring that the Character is equipt with
         :param shield: Shield that the Character is equipt with
         :type name: str
         :type level: int
@@ -32,7 +31,6 @@ class Character:
         :type base_speed: int
         :type weapon: Weapon
         :type armor: Armor
-        :type ring: Ring
         :type shield: Shield
         """
 
@@ -45,7 +43,6 @@ class Character:
         self.__base_speed = base_speed
         self.__weapon = weapon
         self.__armor = armor
-        self.__ring = ring
         self.__shield = shield
 
         self.__update_hp()
@@ -165,17 +162,6 @@ class Character:
         return self.__armor
 
 
-    def get_ring(self):
-        """
-        Gets the ring equipt by the Character
-
-        :return: Character's ring
-        :rtype: Ring
-        """
-
-        return self.__ring
-
-
     def get_shield(self):
         """
         Gets the armor equipt by the Character
@@ -215,8 +201,8 @@ class Character:
         """
 
         self.__attack = math.ceil(self.__base_attack * self.__level / 25)
-        if self.weapon is not None:
-            self.__attack += self.weapon.get_attack()
+        if self.__weapon is not None:
+            self.__attack += self.__weapon.get_attack()
 
 
     def __update_defense(self):
@@ -225,8 +211,8 @@ class Character:
         """
 
         self.__defense = math.ceil(self.__base_defense * self.__level / 25)
-        if self.armor is not None:
-            self.__defense += self.armor.get_defense()
+        if self.__armor is not None:
+            self.__defense += self.__armor.get_defense()
 
 
     def __update_magic(self):
@@ -235,6 +221,8 @@ class Character:
         """
 
         self.__magic = math.ceil(self.__base_magic * self.__level / 25)
+        if self.__weapon is not None:
+            self.__magic += self.__weapon.get_magic()
 
 
     def __update_speed(self):
@@ -243,6 +231,8 @@ class Character:
         """
 
         self.__speed = math.ceil(self.__base_speed * self.__level / 25)
+        if self.__armor is not None:
+            self.__speed += self.__armor.get_speed()
 
 
     def level_up(self):
